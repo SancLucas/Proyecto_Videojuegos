@@ -5,7 +5,7 @@
 
 
 RectangleShape personaje = RectangleShape({60, 60});
-const Vector2f POS_INICIAL_PERSONAJE(ANCHO_VENT / 3.5, 279);
+const Vector2f POS_INICIAL_PERSONAJE(150, 290);
 const float VELOCIDAD = 4.5f;
 
 void leer_eventos(RenderWindow &ventana);
@@ -18,7 +18,7 @@ bool saltar = false;
 
 
 int main(){
-  RenderWindow ventana = RenderWindow({ANCHO_VENT, ALTO_VENT}, "GD");
+  RenderWindow ventana = RenderWindow({ANCHO_VENT, ALTO_VENT}, "Proyecto Maldito");
   ventana.setFramerateLimit(FRAMERATE);
 
   vector<RectanguloBack> cuadradoBack = {
@@ -41,7 +41,7 @@ int main(){
       RectanguloBack({200.f, 63.f}, {1000, 220}),
   };
 
-  vector<RectanguloBack> obstaculos ={
+  vector<RectanguloBack> obstaculos = {
       RectanguloBack({200.f, 50.f}, {1000, 300}),
       RectanguloBack({200.f, 50.f}, {1500, 300}),
   };
@@ -53,14 +53,11 @@ int main(){
     leer_eventos(ventana);
     if(saltar == true) salto();
 
-    if (personaje.getGlobalBounds().intersects(obstaculos[0].getGlobalBounds())){
-      saltar = false;
-      alturaSalto = -limiteSalto;
-      
-      if(!personaje.getGlobalBounds().intersects(suelo.getGlobalBounds())){
-        personaje.move(0, obstaculos[0].getLocalBounds().getSize().y);
-      }
-    }
+    // esperarColision();
+
+
+
+
 
     // Movimiento del fondo
     for (int i = 0; i < cuadradoBack.size(); i++)
