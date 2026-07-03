@@ -5,7 +5,7 @@
 
 
 RectangleShape personaje = RectangleShape({60, 60});
-const Vector2f POS_INICIAL_PERSONAJE(150, 290);
+const Vector2f POS_INICIAL_PERSONAJE(150, 340);
 const float VELOCIDAD = 4.5f;
 
 void leer_eventos(RenderWindow &ventana);
@@ -20,43 +20,50 @@ bool saltar = false;
 int main(){
   RenderWindow ventana = RenderWindow({ANCHO_VENT, ALTO_VENT}, "Proyecto Maldito");
   ventana.setFramerateLimit(FRAMERATE);
-
+  
   vector<RectanguloBack> cuadradoBack = {
-      RectanguloBack({96.f, 160.f}, {0, 0}),
-      RectanguloBack({540.f, 63.f}, {0, 225}),
-      RectanguloBack({270.f, 40.f}, {20, 170}),
-      RectanguloBack({192.f, 112.f}, {110, 48}),
-      RectanguloBack({115.f, 64.f}, {310, 0}),
-      RectanguloBack({80.f, 70.f}, {310, 50}),
-      RectanguloBack({120.f, 80.f}, {310, 130}),
-      RectanguloBack({80.f, 64.f}, {440, 0}),
-      RectanguloBack({100.f, 96.f}, {440, 100}),
-      RectanguloBack({112.f, 288.f}, {550, 0}),
-      RectanguloBack({80.f, 128.f}, {680, 0}),
-      RectanguloBack({150.f, 63.f}, {680, 140}),
-      RectanguloBack({150.f, 63.f}, {680, 220}),
-      RectanguloBack({176.f, 112.f}, {785, 0}),
-      RectanguloBack({150.f, 155.f}, {840, 130}),
-      RectanguloBack({200.f, 200.f}, {1000, 0}),
+    RectanguloBack({96.f, 160.f}, {0, 0}),
+    RectanguloBack({540.f, 63.f}, {0, 225}),
+    RectanguloBack({270.f, 40.f}, {20, 170}),
+    RectanguloBack({192.f, 112.f}, {110, 48}),
+    RectanguloBack({115.f, 64.f}, {310, 0}),
+    RectanguloBack({80.f, 70.f}, {310, 50}),
+    RectanguloBack({120.f, 80.f}, {310, 130}),
+    RectanguloBack({80.f, 64.f}, {440, 0}),
+    RectanguloBack({100.f, 96.f}, {440, 100}),
+    RectanguloBack({112.f, 288.f}, {550, 0}),
+    RectanguloBack({80.f, 128.f}, {680, 0}),
+    RectanguloBack({150.f, 63.f}, {680, 140}),
+    RectanguloBack({150.f, 63.f}, {680, 220}),
+    RectanguloBack({176.f, 112.f}, {785, 0}),
+    RectanguloBack({150.f, 155.f}, {840, 130}),
+    RectanguloBack({200.f, 200.f}, {1000, 0}),
       RectanguloBack({200.f, 63.f}, {1000, 220}),
-  };
+    };
 
-  vector<RectanguloBack> obstaculos = {
+    vector<RectanguloBack> obstaculos = {
       RectanguloBack({200.f, 50.f}, {1000, 300}),
       RectanguloBack({200.f, 50.f}, {1500, 300}),
-  };
+    };
+    
+    RectanguloBack suelo = RectanguloBack({1200, 50}, {0, 340}, Color::Green);
+    personaje.setOrigin(60, 60);
+    personaje.setPosition(POS_INICIAL_PERSONAJE);
 
-  RectanguloBack suelo = RectanguloBack({1200, 50}, {0, 340}, Color::Green);
-  personaje.setPosition(POS_INICIAL_PERSONAJE);
 
   while (ventana.isOpen()){
     leer_eventos(ventana);
+    
+    bool pisandoTierra = personaje.getPosition().y == suelo.getPosition().y;
+    
     if(saltar == true) salto();
-
     // esperarColision();
 
 
 
+    if(personaje.getPosition().y != suelo.getPosition().y){
+      personaje.setPosition((Vector2f) Mouse::getPosition());
+      
 
 
     // Movimiento del fondo
@@ -64,7 +71,7 @@ int main(){
     {
       if (cuadradoBack[0].getPosition().x < -1210)
         cuadradoBack[i].move(1210, 0);
-      cuadradoBack[i].move(velocidadDelFondo, 0);
+        cuadradoBack[i].move(velocidadDelFondo, 0);
     }
 
     // Siempre se borra la pantalla anterior
@@ -89,8 +96,9 @@ int main(){
 
     // Se muestra la pantalla con los elementos dibujados sobre ella:
     ventana.display();
+    }
   }
-}
+
 
 void leer_eventos(RenderWindow &ventana){
   // Se "leen" los eventos y se guardan en event.
