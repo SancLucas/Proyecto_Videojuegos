@@ -21,32 +21,32 @@ int main(){
   RenderWindow ventana = RenderWindow({ANCHO_VENT, ALTO_VENT}, "Proyecto Maldito");
   ventana.setFramerateLimit(FRAMERATE);
   
-  vector<RectanguloBack> cuadradoBack = {
-    RectanguloBack({96.f, 160.f}, {0, 0}),
-    RectanguloBack({540.f, 63.f}, {0, 225}),
-    RectanguloBack({270.f, 40.f}, {20, 170}),
-    RectanguloBack({192.f, 112.f}, {110, 48}),
-    RectanguloBack({115.f, 64.f}, {310, 0}),
-    RectanguloBack({80.f, 70.f}, {310, 50}),
-    RectanguloBack({120.f, 80.f}, {310, 130}),
-    RectanguloBack({80.f, 64.f}, {440, 0}),
-    RectanguloBack({100.f, 96.f}, {440, 100}),
-    RectanguloBack({112.f, 288.f}, {550, 0}),
-    RectanguloBack({80.f, 128.f}, {680, 0}),
-    RectanguloBack({150.f, 63.f}, {680, 140}),
-    RectanguloBack({150.f, 63.f}, {680, 220}),
-    RectanguloBack({176.f, 112.f}, {785, 0}),
-    RectanguloBack({150.f, 155.f}, {840, 130}),
-    RectanguloBack({200.f, 200.f}, {1000, 0}),
-      RectanguloBack({200.f, 63.f}, {1000, 220}),
+  vector<Rectangulo> fondo = {
+    Rectangulo({96.f, 160.f}, {0, 0}),
+    Rectangulo({540.f, 63.f}, {0, 225}),
+    Rectangulo({270.f, 40.f}, {20, 170}),
+    Rectangulo({192.f, 112.f}, {110, 48}),
+    Rectangulo({115.f, 64.f}, {310, 0}),
+    Rectangulo({80.f, 70.f}, {310, 50}),
+    Rectangulo({120.f, 80.f}, {310, 130}),
+    Rectangulo({80.f, 64.f}, {440, 0}),
+    Rectangulo({100.f, 96.f}, {440, 100}),
+    Rectangulo({112.f, 288.f}, {550, 0}),
+    Rectangulo({80.f, 128.f}, {680, 0}),
+    Rectangulo({150.f, 63.f}, {680, 140}),
+    Rectangulo({150.f, 63.f}, {680, 220}),
+    Rectangulo({176.f, 112.f}, {785, 0}),
+    Rectangulo({150.f, 155.f}, {840, 130}),
+    Rectangulo({200.f, 200.f}, {1000, 0}),
+    Rectangulo({200.f, 63.f}, {1000, 220}),
     };
 
-    vector<RectanguloBack> obstaculos = {
-      RectanguloBack({200.f, 50.f}, {1000, 300}),
-      RectanguloBack({200.f, 50.f}, {1500, 300}),
+    vector<Rectangulo> obstaculos = {
+      Rectangulo({200.f, 50.f}, {1000, 300}),
+      Rectangulo({200.f, 50.f}, {1500, 300}),
     };
     
-    RectanguloBack suelo = RectanguloBack({1200, 50}, {0, 340}, Color::Green);
+    Rectangulo suelo = Rectangulo({1200, 50}, {0, 340}, Color::Green);
     personaje.setOrigin(60, 60);
     personaje.setPosition(POS_INICIAL_PERSONAJE);
 
@@ -59,29 +59,28 @@ int main(){
     if(saltar == true) salto();
     // esperarColision();
 
-
-
-    if(personaje.getPosition().y != suelo.getPosition().y){
-      personaje.setPosition((Vector2f) Mouse::getPosition());
-      
+    if(personaje.getPosition().y == suelo.getPosition().y){
+      alturaSalto = -limiteSalto;
+      saltar = false;
+    }
 
 
     // Movimiento del fondo
-    for (int i = 0; i < cuadradoBack.size(); i++)
+    for (int i = 0; i < fondo.size(); i++)
     {
-      if (cuadradoBack[0].getPosition().x < -1210)
-        cuadradoBack[i].move(1210, 0);
-        cuadradoBack[i].move(velocidadDelFondo, 0);
+      if (fondo[0].getPosition().x < -1210)
+        fondo[i].move(1210, 0);
+        fondo[i].move(velocidadDelFondo, 0);
     }
 
     // Siempre se borra la pantalla anterior
     ventana.clear(sf::Color::Blue);
 
     // Se dibujan los elementos:
-    for (RectanguloBack rectagulo : cuadradoBack){
+    for (Rectangulo rectagulo : fondo){
       ventana.draw(rectagulo);
     }
-    for (RectanguloBack rectagulo : cuadradoBack){
+    for (Rectangulo rectagulo : fondo){
       rectagulo.move(1210, 0);
       ventana.draw(rectagulo);
     }
@@ -97,7 +96,7 @@ int main(){
     // Se muestra la pantalla con los elementos dibujados sobre ella:
     ventana.display();
     }
-  }
+}
 
 
 void leer_eventos(RenderWindow &ventana){
@@ -116,8 +115,4 @@ void salto(){
   personaje.move(0, alturaSalto);
   if (alturaSalto < limiteSalto)
     alturaSalto++;
-  else if (alturaSalto == limiteSalto){
-    alturaSalto = -limiteSalto;
-    saltar = false;
-  }
 }

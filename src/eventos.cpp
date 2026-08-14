@@ -16,3 +16,8 @@ bool colision_con_ventana(const FloatRect &r, borde_t borde)
   }
   return false;
 }
+
+
+
+/* if(personaje.getPosition().y != suelo.getPosition().y)
+  personaje.setPosition((Vector2f) Mouse::getPosition()); */
