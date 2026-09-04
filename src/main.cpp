@@ -64,6 +64,16 @@ int main(){
       saltar = false;
     }
 
+    // en todo momento que busque interceptar con el suelo para cortar con el movimiento.
+
+    for (Rectangulo rect: obstaculos){
+      if(rect.getPosition().x == 150 && personaje.getPosition().y < rect.getPosition().y && !saltar){
+        ventana.close();
+      }else if(personaje.getGlobalBounds().intersects(rect.getGlobalBounds())){
+        alturaSalto = -limiteSalto;
+        saltar = false;
+      }
+    }
 
     // Movimiento del fondo
     for (int i = 0; i < fondo.size(); i++)
