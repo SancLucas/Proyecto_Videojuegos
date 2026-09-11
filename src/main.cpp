@@ -39,52 +39,52 @@ int main(){
     Rectangulo({150.f, 155.f}, {840, 130}),
     Rectangulo({200.f, 200.f}, {1000, 0}),
     Rectangulo({200.f, 63.f}, {1000, 220}),
-    };
-
-    vector<Rectangulo> obstaculos = {
-      Rectangulo({200.f, 50.f}, {1000, 300}),
-      Rectangulo({200.f, 50.f}, {1500, 300}),
-    };
-    
-    Rectangulo suelo = Rectangulo({1200, 50}, {0, 340}, Color::Green);
-    personaje.setOrigin(60, 60);
-    personaje.setPosition(POS_INICIAL_PERSONAJE);
-
-
+  };
+  
+  vector<Rectangulo> obstaculos = {
+    Rectangulo({200.f, 50.f}, {1000, 300}),
+    Rectangulo({200.f, 50.f}, {1500, 300}),
+  };
+  
+  Rectangulo suelo = Rectangulo({1200, 50}, {0, 340}, Color::Green);
+  personaje.setOrigin(60, 60);
+  personaje.setPosition(POS_INICIAL_PERSONAJE);
+  
+  bool pisandoTierra, enObstaculo = false;
+  
   while (ventana.isOpen()){
     leer_eventos(ventana);
     
-    bool pisandoTierra = personaje.getPosition().y == suelo.getPosition().y;
-    
     if(saltar == true) salto();
-    // esperarColision();
-
-    if(personaje.getPosition().y == suelo.getPosition().y){
+    
+    pisandoTierra = personaje.getGlobalBounds().intersects(suelo.getGlobalBounds());
+    
+    if(pisandoTierra){
       alturaSalto = -limiteSalto;
       saltar = false;
+    }else if(!enObstaculo && !saltar){
+      personaje.move(0, 2);
     }
-
-    // en todo momento que busque interceptar con el suelo para cortar con el movimiento.
-
-    for (Rectangulo rect: obstaculos){
-      if(rect.getPosition().x == 150 && personaje.getPosition().y < rect.getPosition().y && !saltar){
+    
+    for(Rectangulo rect: obstaculos){
+      cout<<"init";
+      enObstaculo = personaje.getGlobalBounds().intersects(rect.getGlobalBounds());
+      cout << enObstaculo;
+      if(rect.getPosition().x == 150 && personaje.getPosition().y <= rect.getPosition().y && !saltar){
         ventana.close();
-      }else if(personaje.getGlobalBounds().intersects(rect.getGlobalBounds())){
+      }else if(enObstaculo){
         alturaSalto = -limiteSalto;
         saltar = false;
       }
     }
 
-    // Movimiento del fondo
+   /*  // Movimiento del fondo
     for (int i = 0; i < fondo.size(); i++)
     {
       if (fondo[0].getPosition().x < -1210)
         fondo[i].move(1210, 0);
         fondo[i].move(velocidadDelFondo, 0);
     }
-
-    // Siempre se borra la pantalla anterior
-    ventana.clear(sf::Color::Blue);
 
     // Se dibujan los elementos:
     for (Rectangulo rectagulo : fondo){
@@ -93,11 +93,19 @@ int main(){
     for (Rectangulo rectagulo : fondo){
       rectagulo.move(1210, 0);
       ventana.draw(rectagulo);
-    }
+    } */
+
+    // Siempre se borra la pantalla anterior
+    ventana.clear(sf::Color::Blue);
 
     for (int j = 0; j < obstaculos.size(); j++){
       obstaculos[j].move(-2.5, 0);
       ventana.draw(obstaculos[j]);
+    }
+
+    for(Rectangulo rectangulo : fondo){
+      
+      ventana.draw(rectangulo);
     }
 
     ventana.draw(suelo);
@@ -123,6 +131,6 @@ void leer_eventos(RenderWindow &ventana){
 
 void salto(){
   personaje.move(0, alturaSalto);
-  if (alturaSalto < limiteSalto)
+  if(alturaSalto < limiteSalto)
     alturaSalto++;
 }
