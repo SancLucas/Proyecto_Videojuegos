@@ -16,7 +16,6 @@ int limiteSalto = 18;
 int alturaSalto = -limiteSalto;
 bool saltar = false;
 
-
 int main(){
   RenderWindow ventana = RenderWindow({ANCHO_VENT, ALTO_VENT}, "Proyecto Maldito");
   ventana.setFramerateLimit(FRAMERATE);
@@ -63,22 +62,21 @@ int main(){
       alturaSalto = -limiteSalto;
       saltar = false;
     }else if(!enObstaculo && !saltar){
-      personaje.move(0, 2);
-    }
-    
-    for(Rectangulo rect: obstaculos){
-      cout<<"init";
-      enObstaculo = personaje.getGlobalBounds().intersects(rect.getGlobalBounds());
-      cout << enObstaculo;
-      if(rect.getPosition().x == 150 && personaje.getPosition().y <= rect.getPosition().y && !saltar){
-        ventana.close();
-      }else if(enObstaculo){
-        alturaSalto = -limiteSalto;
-        saltar = false;
-      }
+      personaje.move(0, 1);
     }
 
-   /*  // Movimiento del fondo
+
+    enObstaculo = personaje.getGlobalBounds().intersects(obstaculos[0].getGlobalBounds());
+    if(obstaculos[0].getPosition().x == 150 && personaje.getPosition().y >= obstaculos[0].getPosition().y && !saltar){
+      ventana.close();
+    }else if(enObstaculo){
+      alturaSalto = -limiteSalto;
+      saltar = false;
+    }
+    
+    if(!obstaculos.empty() && obstaculos[0].getPosition().x < -obstaculos[0].getSize().x) obstaculos.erase(obstaculos.begin());
+   
+    // Movimiento del fondo
     for (int i = 0; i < fondo.size(); i++)
     {
       if (fondo[0].getPosition().x < -1210)
@@ -93,7 +91,7 @@ int main(){
     for (Rectangulo rectagulo : fondo){
       rectagulo.move(1210, 0);
       ventana.draw(rectagulo);
-    } */
+    }
 
     // Siempre se borra la pantalla anterior
     ventana.clear(sf::Color::Blue);
